@@ -114,6 +114,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, Re
     }
     
     @objc func tapGesture (sender: UITapGestureRecognizer) {
+        if (!previewVisible) {
+            return
+        }
         let node = sceneView.scene.rootNode.childNode(withName: "CenterModel", recursively: false)
         let position = node?.position
         
