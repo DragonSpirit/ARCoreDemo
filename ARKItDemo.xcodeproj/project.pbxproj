@@ -10,6 +10,7 @@
 		E18A10A1F6B995FC85DE9D76 /* Pods_ARKItDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5197754E3012934431DF07E9 /* Pods_ARKItDemo.framework */; };
 		F50406BB2607FAA3001D649B /* sixaedr.usdz in Resources */ = {isa = PBXBuildFile; fileRef = F50406BA2607FAA3001D649B /* sixaedr.usdz */; };
 		F5124CE0261123E800DCBFF5 /* sprint15m.usdz in Resources */ = {isa = PBXBuildFile; fileRef = F5124CDF261123E800DCBFF5 /* sprint15m.usdz */; };
+		F5E999562617723F006AA067 /* gates.usdz in Resources */ = {isa = PBXBuildFile; fileRef = F5E999552617723F006AA067 /* gates.usdz */; };
 		F5F222F326068E3F00F4F819 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222F226068E3F00F4F819 /* AppDelegate.swift */; };
 		F5F222F726068E3F00F4F819 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222F626068E3F00F4F819 /* ViewController.swift */; };
 		F5F222FA26068E3F00F4F819 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5F222F826068E3F00F4F819 /* Main.storyboard */; };
@@ -23,6 +24,7 @@
 		5197754E3012934431DF07E9 /* Pods_ARKItDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARKItDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F50406BA2607FAA3001D649B /* sixaedr.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = sixaedr.usdz; sourceTree = "<group>"; };
 		F5124CDF261123E800DCBFF5 /* sprint15m.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = sprint15m.usdz; sourceTree = "<group>"; };
+		F5E999552617723F006AA067 /* gates.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = gates.usdz; sourceTree = "<group>"; };
 		F5F222EF26068E3F00F4F819 /* ARKItDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARKItDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5F222F226068E3F00F4F819 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F5F222F626068E3F00F4F819 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 		F5F222F126068E3F00F4F819 /* ARKItDemo */ = {
 			isa = PBXGroup;
 			children = (
+				F5E999552617723F006AA067 /* gates.usdz */,
 				F5124CDF261123E800DCBFF5 /* sprint15m.usdz */,
 				F50406BA2607FAA3001D649B /* sixaedr.usdz */,
 				F5F222F226068E3F00F4F819 /* AppDelegate.swift */,
@@ -157,6 +160,7 @@
 				F50406BB2607FAA3001D649B /* sixaedr.usdz in Resources */,
 				F5F222FF26068E3F00F4F819 /* LaunchScreen.storyboard in Resources */,
 				F5F222FC26068E3F00F4F819 /* Assets.xcassets in Resources */,
+				F5E999562617723F006AA067 /* gates.usdz in Resources */,
 				F5F222FA26068E3F00F4F819 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -13,7 +13,21 @@ import Photos
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, RenderARDelegate, RecordARDelegate {
     @IBOutlet var sceneView: ARSCNView!
+    @IBOutlet var stepper: UILabel!
+    @IBOutlet var stepperTitle: UILabel!
+    @IBOutlet var stepperDescription: UILabel!
+    @IBOutlet var titleView: UIView!
+    @IBOutlet var commonView: UIView!
     @IBOutlet var recoredBtn: UIButton!
+    @IBOutlet var nextBtn: UIButton!
+    @IBOutlet var progressBar: UIProgressView!
+    
+    let isPortrait = true
+    var step = 1
+    let minHeight = 1
+    let minWidth = 1
+    let stepperTitles = ["Шаг 1", "Шаг 2", "Делай хорошо", "Шаг 3", "Скоро начнем"]
+    let stepperDesriptions = ["Шаг 1", "Шаг 2", "Делай хорошо", "Шаг 3", "Скоро начнем"]
     
     let recordingQueue = DispatchQueue(label: "recordingThread", attributes: .concurrent)
     
@@ -61,20 +75,55 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, Re
         recorder?.enableAdjustEnvironmentLighting = true
         
         // Set the UIViewController orientations
-        recorder?.inputViewOrientations = [.landscapeLeft, .landscapeRight, .portrait]
+//        recorder?.inputViewOrientations = [.landscapeLeft, .landscapeRight, .portrait]
         
+        if (isPortrait){
+            recorder?.inputViewOrientations = [.portrait]
+        } else {
+            recorder?.inputViewOrientations = [.landscapeLeft]
+        }
         // Configure RecordAR to store media files in local app directory
         recorder?.deleteCacheWhenExported = false
+        
+        
+        if (!isPortrait){
+            // if lanscape orientation
+            let screenSize: CGRect = UIScreen.main.bounds
+            let width = max(screenSize.width , screenSize.height)
+            titleView.autoresizingMask = [ .flexibleRightMargin, .flexibleBottomMargin]
+            titleView.frame = CGRect(x: 10, y: 10, width: width / 2 - 40, height: titleView.frame.height)
+            
+            commonView.autoresizingMask = [ ]
+            commonView.frame = CGRect(x: width / 2, y: 10, width: width / 2 - 10, height: commonView.frame.height)
+        }
+    }
+    
+    @IBAction func nextStep(_ sender: UIButton) {
+        step = step + 1
+        
+        if (step > 5) {
+            record()
+            recoredBtn.isHidden = false
+            commonView.isHidden = true
+        } else {
+            stepper.text = String(step)
+            stepperTitle.text = stepperTitles[step-1]
+            stepperDescription.text = stepperDesriptions[step-1]
+        }
     }
     
     @IBAction func click(_ sender: UIButton) {
+        record()
+    }
+    
+    func record() -> Void {
         if recorder?.status == .readyToRecord {
-            sender.setTitle("Stop", for: .normal)
+            recoredBtn.setTitle("Остановить запись", for: .normal)
             recordingQueue.async {
                 self.recorder?.record()
             }
         } else if recorder?.status == .recording {
-            sender.setTitle("Record", for: .normal)
+            recoredBtn.setTitle("Тут типа на сервер отправить", for: .normal)
             recorder?.stop() { path in
                 self.recorder?.export(video: path) { saved, status in
                     DispatchQueue.main.sync {
@@ -89,7 +138,15 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, Re
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        recoredBtn.contentEdgeInsets = UIEdgeInsets(top: 20.0, left: 30.0, bottom: 20.0, right: 30.0)
+//        recoredBtn.contentEdgeInsets = UIEdgeInsets(top: 20.0, left: 30.0, bottom: 20.0, right: 30.0)
+    
+//        nextBtn.contentEdgeInsets = UIEdgeInsets(top: 20.0, left: 30.0, bottom: 120.0, right: 30.0)
+        nextBtn.isHidden = true
+        recoredBtn.isHidden = true
+        progressBar.progress = 0.0
+        
+        stepperTitle.text = stepperTitles[step-1]
+        stepperDescription.text = stepperDesriptions[step-1]
         
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
@@ -105,12 +162,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, Re
     }
     
     func addGestures () {
-        let tapped = UITapGestureRecognizer(target: self, action: #selector(tapGesture))
-        
-        let rotateGesture = UIRotationGestureRecognizer(target: self, action: #selector(rotateNode(_:)))
-        
-        sceneView.addGestureRecognizer(tapped)
-        sceneView.addGestureRecognizer(rotateGesture)
+//        let tapped = UITapGestureRecognizer(target: self, action: #selector(tapGesture))
+//
+//        let rotateGesture = UIRotationGestureRecognizer(target: self, action: #selector(rotateNode(_:)))
+//
+//        sceneView.addGestureRecognizer(tapped)
+//        sceneView.addGestureRecognizer(rotateGesture)
     }
     
     @objc func tapGesture (sender: UITapGestureRecognizer) {
@@ -239,6 +296,20 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, Re
         
         if let planeGeometry = planeNode?.geometry as? ARSCNPlaneGeometry {
             planeGeometry.update(from: planeAnchor.geometry)
+//            print("X:")
+//            print(planeAnchor.extent.x)
+//            print("Y:")
+//            print(planeAnchor.extent.z)
+            if (progressBar.progress<1){
+                let h = Float.minimum(Float(minHeight), planeAnchor.extent.z)
+                let w = Float.minimum(Float(minWidth), planeAnchor.extent.x)
+                let sq = (h * w) / (Float(minHeight) * Float(minWidth));
+                progressBar.progress = sq
+                if (1 <= progressBar.progress ){
+                    nextBtn.isHidden = false
+                    progressBar.isHidden = true
+                }
+            }
         }
         
     }
@@ -268,7 +339,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, Re
         let hitTest = sceneView.session.raycast(query)
         
         if hitTest.isEmpty {
-            print("No Plane Detected")
+//            print("No Plane Detected")
             return
         } else {
             
@@ -298,6 +369,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, Re
             node?.isHidden = !previewVisible
         }
     }
+    
+//    Lock orientation
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return isPortrait ? .portrait : .landscapeLeft
+    }
+    
 }
 
 
